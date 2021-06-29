@@ -312,16 +312,20 @@ public class SpringApplication {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySources) {
-		this.resourceLoader = resourceLoader;
-		Assert.notNull(primarySources, "PrimarySources must not be null");
-		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
-		this.webApplicationType = WebApplicationType.deduceFromClasspath();
+		this.resourceLoader = resourceLoader; //初始化时，默认为null
+		Assert.notNull(primarySources, "PrimarySources must not be null"); //primarySources 默认为传进来的启动类
+		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources)); //将主类放到primarySources中
+		this.webApplicationType = WebApplicationType.deduceFromClasspath(); //返回应用类型
+		//这里默认没有加载到任何类到bootstrapRegistryInitializers里
 		this.bootstrapRegistryInitializers = getBootstrapRegistryInitializersFromSpringFactories();
+		//加载spring.factories中的 ApplicationContextInitializer 并放入this.initializers
 		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
+		//加载spring.factories中的 ApplicationListener 并放入this.listeners
 		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
-		this.mainApplicationClass = deduceMainApplicationClass();
+		this.mainApplicationClass = deduceMainApplicationClass(); //通过抛出异常找到主类
 	}
 
+	//SpringFactoriesLoader中会加载所有在META-INF/spring.factories中的类，并分类存放于cache中（Map<ClassLoader, Map<String, List<String>>> cache）
 	@SuppressWarnings("deprecation")
 	private List<BootstrapRegistryInitializer> getBootstrapRegistryInitializersFromSpringFactories() {
 		ArrayList<BootstrapRegistryInitializer> initializers = new ArrayList<>();
@@ -354,12 +358,12 @@ public class SpringApplication {
 	 * @return a running {@link ApplicationContext}
 	 */
 	public ConfigurableApplicationContext run(String... args) {
-		StopWatch stopWatch = new StopWatch();
+		StopWatch stopWatch = new StopWatch(); //计时器，统计启动时间
 		stopWatch.start();
 		DefaultBootstrapContext bootstrapContext = createBootstrapContext();
 		ConfigurableApplicationContext context = null;
-		configureHeadlessProperty();
-		SpringApplicationRunListeners listeners = getRunListeners(args);
+		configureHeadlessProperty(); //设置环境为
+		SpringApplicationRunListeners listeners = getRunListeners(args); //EventPublishingRunListener
 		listeners.starting(bootstrapContext, this.mainApplicationClass);
 		try {
 			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
@@ -393,6 +397,7 @@ public class SpringApplication {
 		return context;
 	}
 
+	//初始化DefaultBootStrapContext 并让 bootstrapRegistryInitializers 初始化 bootstrapContext
 	private DefaultBootstrapContext createBootstrapContext() {
 		DefaultBootstrapContext bootstrapContext = new DefaultBootstrapContext();
 		this.bootstrapRegistryInitializers.forEach((initializer) -> initializer.initialize(bootstrapContext));
@@ -473,6 +478,7 @@ public class SpringApplication {
 				System.getProperty(SYSTEM_PROPERTY_JAVA_AWT_HEADLESS, Boolean.toString(this.headless)));
 	}
 
+	//从cache.get(ClassLoader)获取 SpringApplicationRunListener 并初始化后返回
 	private SpringApplicationRunListeners getRunListeners(String[] args) {
 		Class<?>[] types = new Class<?>[] { SpringApplication.class, String[].class };
 		return new SpringApplicationRunListeners(logger,
@@ -484,6 +490,7 @@ public class SpringApplication {
 		return getSpringFactoriesInstances(type, new Class<?>[] {});
 	}
 
+	//判断当前cache.get(classloader)中是否存在传入的type，如果存在则初始化后返回集合
 	private <T> Collection<T> getSpringFactoriesInstances(Class<T> type, Class<?>[] parameterTypes, Object... args) {
 		ClassLoader classLoader = getClassLoader();
 		// Use names and ensure unique to protect against duplicates

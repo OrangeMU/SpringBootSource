@@ -58,16 +58,26 @@ public enum WebApplicationType {
 
 	private static final String REACTIVE_APPLICATION_CONTEXT_CLASS = "org.springframework.boot.web.reactive.context.ReactiveWebApplicationContext";
 
+	//ClassUtils.isPresent(Class, ClassLoader)
+	/**
+	 * 这个方法会大致会执行以下步骤：
+	 * 1.判断是否存在于ClassUtils.commonsCache中，ClassUtils.commonsCache中存在47个JVM内部的类
+	 * 2.判断是否是[] [L [[I 类型的数组，如果是的话查看基础类型是否存在于ClassUtils.commonsCache中
+	 * 3.如果上面都不满足，则尝试从classloader中加载，如果不能加载则返回false
+	 * */
 	static WebApplicationType deduceFromClasspath() {
+		//DispatcherHandler && !ServletContainer && !ServletContainer ==> REACTIVE
 		if (ClassUtils.isPresent(WEBFLUX_INDICATOR_CLASS, null) && !ClassUtils.isPresent(WEBMVC_INDICATOR_CLASS, null)
 				&& !ClassUtils.isPresent(JERSEY_INDICATOR_CLASS, null)) {
 			return WebApplicationType.REACTIVE;
 		}
+		//!Servlet && !ConfigurableWebApplicationContext ==> NONE
 		for (String className : SERVLET_INDICATOR_CLASSES) {
 			if (!ClassUtils.isPresent(className, null)) {
 				return WebApplicationType.NONE;
 			}
 		}
+		//否则默认SERVLET
 		return WebApplicationType.SERVLET;
 	}
 
