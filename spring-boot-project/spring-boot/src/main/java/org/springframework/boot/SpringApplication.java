@@ -162,6 +162,7 @@ public class SpringApplication {
 	 * @deprecated since 2.4.0 for removal in 2.6.0 in favor of using a
 	 * {@link ApplicationContextFactory}
 	 */
+	//默认应用上下文
 	@Deprecated
 	public static final String DEFAULT_CONTEXT_CLASS = "org.springframework.context."
 			+ "annotation.AnnotationConfigApplicationContext";
@@ -172,6 +173,7 @@ public class SpringApplication {
 	 * @deprecated since 2.4.0 for removal in 2.6.0 in favor of using an
 	 * {@link ApplicationContextFactory}
 	 */
+	//默认SERVLET-WEB环境应用上下文
 	@Deprecated
 	public static final String DEFAULT_SERVLET_WEB_CONTEXT_CLASS = "org.springframework.boot."
 			+ "web.servlet.context.AnnotationConfigServletWebServerApplicationContext";
@@ -182,6 +184,7 @@ public class SpringApplication {
 	 * @deprecated since 2.4.0 for removal in 2.6.0 in favor of using an
 	 * {@link ApplicationContextFactory}
 	 */
+	//默认REACTIVE-WEB环境应用上下文
 	@Deprecated
 	public static final String DEFAULT_REACTIVE_WEB_CONTEXT_CLASS = "org.springframework."
 			+ "boot.web.reactive.context.AnnotationConfigReactiveWebServerApplicationContext";
@@ -189,67 +192,98 @@ public class SpringApplication {
 	/**
 	 * Default banner location.
 	 */
+	//配置在property中的banner文件名的value
 	public static final String BANNER_LOCATION_PROPERTY_VALUE = SpringApplicationBannerPrinter.DEFAULT_BANNER_LOCATION;
 
 	/**
 	 * Banner location property key.
 	 */
+	//配置在property中的banner文件名的key
 	public static final String BANNER_LOCATION_PROPERTY = SpringApplicationBannerPrinter.BANNER_LOCATION_PROPERTY;
 
+	//headless==>无显示设备、鼠键设备
 	private static final String SYSTEM_PROPERTY_JAVA_AWT_HEADLESS = "java.awt.headless";
 
+	//日志记录器
 	private static final Log logger = LogFactory.getLog(SpringApplication.class);
 
+	//将SpringApplicationShutdownHook添加到 Runtime的关闭钩子函数集合中
+	// Runtime.getRuntime().addShutdownHook(this, "SpringApplicationShutdownHook")
 	static final SpringApplicationShutdownHook shutdownHook = new SpringApplicationShutdownHook();
 
+	//主资源类==>其实默认就是把启动类传进来
 	private Set<Class<?>> primarySources;
 
+	//资源集合
 	private Set<String> sources = new LinkedHashSet<>();
 
+	//主应用类
 	private Class<?> mainApplicationClass;
 
+	//Banner的打印方式 OFF LOG CONSOLE
 	private Banner.Mode bannerMode = Banner.Mode.CONSOLE;
 
+	//是否记录启动信息
 	private boolean logStartupInfo = true;
 
+	//是否添加命令行属性值/环境变量
 	private boolean addCommandLineProperties = true;
 
+	//是否添加转换service
 	private boolean addConversionService = true;
 
+	//banner对象
 	private Banner banner;
 
+	//资源加载器
 	private ResourceLoader resourceLoader;
 
+	//beanName生成器
 	private BeanNameGenerator beanNameGenerator;
 
+	//可配置环境
 	private ConfigurableEnvironment environment;
 
+	//Web应用类型
 	private WebApplicationType webApplicationType;
 
+	//缺少显示设备、鼠键设备
 	private boolean headless = true;
 
+	//是否注册关闭钩子函数
 	private boolean registerShutdownHook = true;
 
+	//应用上下文初始器集合
 	private List<ApplicationContextInitializer<?>> initializers;
 
+	//应用监听器集合
 	private List<ApplicationListener<?>> listeners;
 
+	//默认环境变量集合
 	private Map<String, Object> defaultProperties;
 
+	//引导注册表初始化器
 	private List<BootstrapRegistryInitializer> bootstrapRegistryInitializers;
 
+	//额外的配置文件
 	private Set<String> additionalProfiles = Collections.emptySet();
 
+	//允许重写BeanDefinition
 	private boolean allowBeanDefinitionOverriding;
 
+	//是否是自定义环境 ==> 否
 	private boolean isCustomEnvironment = false;
 
+	//是否是懒初始化 ==> 否
 	private boolean lazyInitialization = false;
 
+	//环境前缀("my")
 	private String environmentPrefix;
 
+	//应用上下文工厂
 	private ApplicationContextFactory applicationContextFactory = ApplicationContextFactory.DEFAULT;
 
+	//应用启动器
 	private ApplicationStartup applicationStartup = ApplicationStartup.DEFAULT;
 
 	/**
