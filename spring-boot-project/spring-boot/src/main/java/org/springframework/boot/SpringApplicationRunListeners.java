@@ -112,6 +112,7 @@ class SpringApplicationRunListeners {
 		doWithListeners(stepName, listenerAction, null);
 	}
 
+	//调用Listener（EventPublishingRunListener）
 	private void doWithListeners(String stepName, Consumer<SpringApplicationRunListener> listenerAction,
 			Consumer<StartupStep> stepAction) {
 		StartupStep step = this.applicationStartup.start(stepName);
