@@ -362,7 +362,7 @@ public class SpringApplication {
 		stopWatch.start();
 		DefaultBootstrapContext bootstrapContext = createBootstrapContext();
 		ConfigurableApplicationContext context = null;
-		configureHeadlessProperty(); //设置环境为
+		configureHeadlessProperty(); //设置环境为无显示设备、无鼠键设备
 		SpringApplicationRunListeners listeners = getRunListeners(args); //EventPublishingRunListener
 		listeners.starting(bootstrapContext, this.mainApplicationClass);
 		try {
