@@ -77,6 +77,13 @@ public class EventPublishingRunListener implements SpringApplicationRunListener,
 				.multicastEvent(new ApplicationStartingEvent(bootstrapContext, this.application, this.args));
 	}
 
+	// environment-prepared 阶段会调用6个listener
+	//1. EnvironmentPostProcessorApplicationListener
+	//2. AnsiOutputApplicationListener
+	//3. LoggingApplicationListener
+	//4. BackgroundPreinitializer
+	//5. DelegatingApplicationListener
+	//6. FileEncodingApplicationListener
 	@Override
 	public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext,
 			ConfigurableEnvironment environment) {

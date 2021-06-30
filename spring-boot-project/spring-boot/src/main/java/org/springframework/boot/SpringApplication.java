@@ -409,7 +409,7 @@ public class SpringApplication {
 		// Create and configure the environment
 		ConfigurableEnvironment environment = getOrCreateEnvironment();
 		configureEnvironment(environment, applicationArguments.getSourceArgs()); //读取PropertiesPropertySources（Java环境变量信息）、SystemEnvironmentPropertySource（系统环境变量） 配置信息
-		ConfigurationPropertySources.attach(environment);
+		ConfigurationPropertySources.attach(environment); //新创建ConfigurationPropertySourcesPropertySource添加到environment.sources -> propertySources  MutablePropertySources中包含propertySources(ConfigurableEnvironment)、systemProperty、systemEnvironment
 		listeners.environmentPrepared(bootstrapContext, environment);
 		DefaultPropertiesPropertySource.moveToEnd(environment);
 		Assert.state(!environment.containsProperty("spring.main.environment-prefix"),
