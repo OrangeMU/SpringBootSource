@@ -94,6 +94,14 @@ public class EnvironmentPostProcessorApplicationListener implements SmartApplica
 		}
 	}
 
+	//此处调用Environment-Prepared Processer 共7个
+	//1. RandomValuePropertySourceEnvironmentPostProcessor
+	//2. SystemEnvironmentPropertySourceEnvironmentPostProcessor
+	//3. SpringApplicationJsonEnvironmentPostProcessor
+	//4. CloudFoundryVcapEnvironmentPostProcessor
+	//5. ConfigDataEnvironmentPostProcessor
+	//6. IntegrationPropertiesEnvironmentPostProcessor
+	//7. DebugAgentEnvironmentPostProcessor
 	private void onApplicationEnvironmentPreparedEvent(ApplicationEnvironmentPreparedEvent event) {
 		ConfigurableEnvironment environment = event.getEnvironment();
 		SpringApplication application = event.getSpringApplication();
