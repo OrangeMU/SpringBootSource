@@ -71,6 +71,10 @@ public final class ConfigurationPropertySources {
 	}
 
 	/**
+	 * 将配置属性源支持附加到指定的环境。将环境管理的每个属性源调整为配置属性源，并允许经典的属性源属性解析器调用使用配置属性名配置属性名进行解析。
+	 * 附加的解析器将动态跟踪从基础环境属性源中添加或删除的任何内容。
+	 */
+	/**
 	 * Attach a {@link ConfigurationPropertySource} support to the specified
 	 * {@link Environment}. Adapts each {@link PropertySource} managed by the environment
 	 * to a {@link ConfigurationPropertySource} and allows classic

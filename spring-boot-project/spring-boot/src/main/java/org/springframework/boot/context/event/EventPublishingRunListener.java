@@ -61,7 +61,7 @@ public class EventPublishingRunListener implements SpringApplicationRunListener,
 		this.args = args;
 		this.initialMulticaster = new SimpleApplicationEventMulticaster();
 		for (ApplicationListener<?> listener : application.getListeners()) {
-			this.initialMulticaster.addApplicationListener(listener);
+			this.initialMulticaster.addApplicationListener(listener); //初始化EventPublicshingRunListener时将所有已经加载的listener添加到initialMulticaster中
 		}
 	}
 
@@ -70,6 +70,7 @@ public class EventPublishingRunListener implements SpringApplicationRunListener,
 		return 0;
 	}
 
+	// 会判断类型，最后会invoke三个listener 1. LoggingApplicationListener 2. BackgroundPreinitializer 3. DelegatingApplicationListener
 	@Override
 	public void starting(ConfigurableBootstrapContext bootstrapContext) {
 		this.initialMulticaster

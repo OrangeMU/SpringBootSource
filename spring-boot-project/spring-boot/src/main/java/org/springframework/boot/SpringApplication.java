@@ -366,7 +366,7 @@ public class SpringApplication {
 		SpringApplicationRunListeners listeners = getRunListeners(args); //EventPublishingRunListener
 		listeners.starting(bootstrapContext, this.mainApplicationClass);
 		try {
-			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
+			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args); //初始化应用参数对象 默认为DefaultApplicationArguments
 			ConfigurableEnvironment environment = prepareEnvironment(listeners, bootstrapContext, applicationArguments);
 			configureIgnoreBeanInfo(environment);
 			Banner printedBanner = printBanner(environment);
@@ -408,7 +408,7 @@ public class SpringApplication {
 			DefaultBootstrapContext bootstrapContext, ApplicationArguments applicationArguments) {
 		// Create and configure the environment
 		ConfigurableEnvironment environment = getOrCreateEnvironment();
-		configureEnvironment(environment, applicationArguments.getSourceArgs());
+		configureEnvironment(environment, applicationArguments.getSourceArgs()); //读取PropertiesPropertySources（Java环境变量信息）、SystemEnvironmentPropertySource（系统环境变量） 配置信息
 		ConfigurationPropertySources.attach(environment);
 		listeners.environmentPrepared(bootstrapContext, environment);
 		DefaultPropertiesPropertySource.moveToEnd(environment);
@@ -491,6 +491,7 @@ public class SpringApplication {
 	}
 
 	//判断当前cache.get(classloader)中是否存在传入的type，如果存在则初始化后返回集合
+	//会加载spring-boot-autoconfigure spring-boot spring META-INF/spring.factories下的类名并缓存在SpringFactoriesLoader.cache中
 	private <T> Collection<T> getSpringFactoriesInstances(Class<T> type, Class<?>[] parameterTypes, Object... args) {
 		ClassLoader classLoader = getClassLoader();
 		// Use names and ensure unique to protect against duplicates
